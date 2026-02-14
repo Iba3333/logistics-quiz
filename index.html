@@ -324,7 +324,7 @@
       </div>
       <h1>Interactive Logistics & Supply Chain Practice Exam</h1>
       <div class="subtitle">
-        MCQ · True/False · Short Answer · Long Answer – with hints and feedback. Only MCQ and True/False are auto‑graded.
+        MCQ · True/False · Short Answer · Long Answer – hints and model answers only when you click the buttons.
       </div>
     </header>
 
@@ -337,7 +337,7 @@
       </div>
 
       <div class="section-caption">
-        Choose a tab, answer each question, then press <b>Check</b>. Use <b>Hint</b> if you need a reminder from the slides.
+        Answer the question, then press <b>Check</b>. Use <b>Hint</b> or <b>Model answer</b> only if you get stuck.
       </div>
 
       <!-- MCQ GROUP -->
@@ -756,7 +756,7 @@
         </div>
       </section>
 
-      <!-- SHORT ANSWER GROUP -->
+      <!-- SHORT ANSWER GROUP (empty boxes) -->
       <section id="g-sa" class="group">
         <div class="question-card" data-qid="sa1">
           <div class="q-header">
@@ -766,7 +766,7 @@
             </div>
             <div class="q-points">Open answer</div>
           </div>
-          <textarea id="sa1-input" placeholder="Example: raw materials, work‑in‑progress, finished goods ..."></textarea>
+          <textarea id="sa1-input" placeholder=""></textarea>
           <div class="btn-row">
             <button class="btn primary" onclick="toggleModelAnswer('sa1')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('sa1')">Hint</button>
@@ -786,7 +786,7 @@
             </div>
             <div class="q-points">Open answer</div>
           </div>
-          <textarea id="sa2-input" placeholder="Example: higher customer satisfaction, reduced costs, stronger brand, improved sustainability ..."></textarea>
+          <textarea id="sa2-input" placeholder=""></textarea>
           <div class="btn-row">
             <button class="btn primary" onclick="toggleModelAnswer('sa2')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('sa2')">Hint</button>
@@ -805,7 +805,7 @@
             </div>
             <div class="q-points">Open answer</div>
           </div>
-          <textarea id="sa3-input" placeholder="Mention quality, completeness, and general appearance ..."></textarea>
+          <textarea id="sa3-input" placeholder=""></textarea>
           <div class="btn-row">
             <button class="btn primary" onclick="toggleModelAnswer('sa3')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('sa3')">Hint</button>
@@ -824,7 +824,7 @@
             </div>
             <div class="q-points">Open answer</div>
           </div>
-          <textarea id="sa4-input" placeholder="Material flow, information flow, financial flow ..."></textarea>
+          <textarea id="sa4-input" placeholder=""></textarea>
           <div class="btn-row">
             <button class="btn primary" onclick="toggleModelAnswer('sa4')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('sa4')">Hint</button>
@@ -843,7 +843,7 @@
             </div>
             <div class="q-points">Open answer</div>
           </div>
-          <textarea id="sa5-input" placeholder="Push = forecast‑driven & higher inventory, Pull = demand‑driven & lower inventory ..."></textarea>
+          <textarea id="sa5-input" placeholder=""></textarea>
           <div class="btn-row">
             <button class="btn primary" onclick="toggleModelAnswer('sa5')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('sa5')">Hint</button>
@@ -855,7 +855,7 @@
         </div>
       </section>
 
-      <!-- LONG ANSWER GROUP -->
+      <!-- LONG ANSWER GROUP (empty boxes) -->
       <section id="g-la" class="group">
         <div class="question-card" data-qid="la1">
           <div class="q-header">
@@ -865,7 +865,7 @@
             </div>
             <div class="q-points">Essay answer</div>
           </div>
-          <textarea id="la1-input" placeholder="Define logistics, define supply chain, then explain that logistics is part of SCM and how they interact ..."></textarea>
+          <textarea id="la1-input" placeholder=""></textarea>
           <div class="btn-row">
             <button class="btn primary" onclick="toggleModelAnswer('la1')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('la1')">Hint</button>
@@ -885,7 +885,7 @@
             </div>
             <div class="q-points">Essay answer</div>
           </div>
-          <textarea id="la2-input" placeholder="Explain decision making, aim (cost vs service), trade‑offs, 4Ds and benefits like cost savings, efficiency, customer satisfaction ..."></textarea>
+          <textarea id="la2-input" placeholder=""></textarea>
           <div class="btn-row">
             <button class="btn primary" onclick="toggleModelAnswer('la2')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('la2')">Hint</button>
@@ -904,7 +904,7 @@
             </div>
             <div class="q-points">Essay answer</div>
           </div>
-          <textarea id="la3-input" placeholder="Explain each: when production starts, level of customization, cost and lead time; link them to push/pull ..."></textarea>
+          <textarea id="la3-input" placeholder=""></textarea>
           <div class="btn-row">
             <button class="btn primary" onclick="toggleModelAnswer('la3')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('la3')">Hint</button>
@@ -922,14 +922,13 @@
         <div id="scoreText" class="score-value">0 / 17</div>
         <button class="btn primary" style="margin-top:6px;" onclick="calculateScore()">Calculate score</button>
         <div class="footer-note">
-          Short and Long Answer questions are not auto‑graded. Use the model answers as a guide to check whether your understanding is correct.
+          Short and Long Answer questions are not auto‑graded. Use the model answers only to check your understanding.
         </div>
       </div>
     </main>
   </div>
 
   <script>
-    // Tabs
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -940,7 +939,6 @@
       });
     });
 
-    // Model answers
     const modelAnswers = {
       sa1: "Three main types: raw materials, work‑in‑progress (WIP), and finished goods [file:7].",
       sa2: "Examples: higher customer satisfaction, reduced costs, stronger brand reputation, and improved sustainability. Any two clearly stated are fine [file:6].",
