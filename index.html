@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Logistics & Supply Chain – Midterm Practice Quiz</title>
@@ -13,7 +13,6 @@
       --accent-soft: rgba(34,197,94,0.12);
       --text-main: #e5e7eb;
       --text-muted: #9ca3af;
-      --danger: #f97373;
       --border-soft: #1f2937;
       --radius-lg: 18px;
       --radius-md: 12px;
@@ -325,7 +324,7 @@
       </div>
       <h1>Interactive Logistics & Supply Chain Practice Exam</h1>
       <div class="subtitle">
-        MCQ – True/False – Short Answer – Long Answer with hints, instant feedback, and auto‑scoring for objective questions.
+        MCQ · True/False · Short Answer · Long Answer – with hints and feedback. Only MCQ and True/False are auto‑graded.
       </div>
     </header>
 
@@ -338,7 +337,7 @@
       </div>
 
       <div class="section-caption">
-        Pick a tab, answer the questions, then press <b>Check</b>. Use <b>Hint</b> to recall the slide where the answer comes from.
+        Choose a tab, answer each question, then press <b>Check</b>. Use <b>Hint</b> if you need a reminder from the slides.
       </div>
 
       <!-- MCQ GROUP -->
@@ -563,7 +562,7 @@
             <button class="btn secondary" onclick="toggleHint('mc9')">Hint</button>
           </div>
           <div class="hint" id="hint-mc9">
-            See the SMART goal example (weight loss) in the strategy slides [file:8].
+            See the SMART goal example in the strategy slides [file:8].
           </div>
           <div class="feedback" id="fb-mc9"></div>
         </div>
@@ -578,7 +577,7 @@
             <div class="q-points">1 point</div>
           </div>
           <div class="options">
-            <label><input type="radio" name="mc10" value="a"> MTS after order, MTO before order, ETO always in stock.</label>
+            <label><input type="radio" name="mc10" value="a"> MTS after order; MTO before order; ETO always in stock.</label>
             <label><input type="radio" name="mc10" value="b"> MTS: make to stock based on forecast; MTO: make after order; ETO: engineer & make after order with custom design.</label>
             <label><input type="radio" name="mc10" value="c"> All three start only after customer order.</label>
             <label><input type="radio" name="mc10" value="d"> Only ETO uses forecasts.</label>
@@ -588,7 +587,7 @@
             <button class="btn secondary" onclick="toggleHint('mc10')">Hint</button>
           </div>
           <div class="hint" id="hint-mc10">
-            See Production Approaches (MTS/MTO/ETO) and the hands‑on examples [file:7].
+            See Production Approaches and the hands‑on examples [file:7].
           </div>
           <div class="feedback" id="fb-mc10"></div>
         </div>
@@ -646,7 +645,6 @@
 
       <!-- TRUE/FALSE GROUP -->
       <section id="g-tf" class="group">
-        <!-- TF 1 -->
         <div class="question-card" data-qid="tf1">
           <div class="q-header">
             <div>
@@ -669,7 +667,6 @@
           <div class="feedback" id="fb-tf1"></div>
         </div>
 
-        <!-- TF 2 -->
         <div class="question-card" data-qid="tf2">
           <div class="q-header">
             <div>
@@ -683,7 +680,7 @@
             <label><input type="radio" name="tf2" value="F"> False</label>
           </div>
           <div class="btn-row">
-            <button class="btn primary" onclick="checkTF('tf2','T','PL = Party Logistics; the higher the number, the higher the outsourcing level from 1PL to 5PL [file:2].')">Check</button>
+            <button class="btn primary" onclick="checkTF('tf2','T','PL stands for Party Logistics; the higher the number, the higher the outsourcing level from 1PL to 5PL [file:2].')">Check</button>
             <button class="btn secondary" onclick="toggleHint('tf2')">Hint</button>
           </div>
           <div class="hint" id="hint-tf2">
@@ -692,7 +689,6 @@
           <div class="feedback" id="fb-tf2"></div>
         </div>
 
-        <!-- TF 3 -->
         <div class="question-card" data-qid="tf3">
           <div class="q-header">
             <div>
@@ -715,7 +711,6 @@
           <div class="feedback" id="fb-tf3"></div>
         </div>
 
-        <!-- TF 4 -->
         <div class="question-card" data-qid="tf4">
           <div class="q-header">
             <div>
@@ -738,7 +733,6 @@
           <div class="feedback" id="fb-tf4"></div>
         </div>
 
-        <!-- TF 5 -->
         <div class="question-card" data-qid="tf5">
           <div class="q-header">
             <div>
@@ -772,11 +766,11 @@
             </div>
             <div class="q-points">Open answer</div>
           </div>
-          <textarea id="sa1-input" placeholder="Example: Raw materials, work‑in‑progress, finished goods ..."></textarea>
+          <textarea id="sa1-input" placeholder="Example: raw materials, work‑in‑progress, finished goods ..."></textarea>
           <div class="btn-row">
-            <button class="btn primary" onclick="showModelAnswer('sa1')">Show model answer</button>
+            <button class="btn primary" onclick="toggleModelAnswer('sa1')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('sa1')">Hint</button>
-            <span class="badge-mini">Manual marking – understanding is more important than wording</span>
+            <span class="badge-mini">Manual checking – idea is more important than wording</span>
           </div>
           <div class="hint" id="hint-sa1">
             The Inventory & Warehousing slide lists the three main types [file:7].
@@ -794,7 +788,7 @@
           </div>
           <textarea id="sa2-input" placeholder="Example: higher customer satisfaction, reduced costs, stronger brand, improved sustainability ..."></textarea>
           <div class="btn-row">
-            <button class="btn primary" onclick="showModelAnswer('sa2')">Show model answer</button>
+            <button class="btn primary" onclick="toggleModelAnswer('sa2')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('sa2')">Hint</button>
           </div>
           <div class="hint" id="hint-sa2">
@@ -813,7 +807,7 @@
           </div>
           <textarea id="sa3-input" placeholder="Mention quality, completeness, and general appearance ..."></textarea>
           <div class="btn-row">
-            <button class="btn primary" onclick="showModelAnswer('sa3')">Show model answer</button>
+            <button class="btn primary" onclick="toggleModelAnswer('sa3')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('sa3')">Hint</button>
           </div>
           <div class="hint" id="hint-sa3">
@@ -832,7 +826,7 @@
           </div>
           <textarea id="sa4-input" placeholder="Material flow, information flow, financial flow ..."></textarea>
           <div class="btn-row">
-            <button class="btn primary" onclick="showModelAnswer('sa4')">Show model answer</button>
+            <button class="btn primary" onclick="toggleModelAnswer('sa4')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('sa4')">Hint</button>
           </div>
           <div class="hint" id="hint-sa4">
@@ -851,7 +845,7 @@
           </div>
           <textarea id="sa5-input" placeholder="Push = forecast‑driven & higher inventory, Pull = demand‑driven & lower inventory ..."></textarea>
           <div class="btn-row">
-            <button class="btn primary" onclick="showModelAnswer('sa5')">Show model answer</button>
+            <button class="btn primary" onclick="toggleModelAnswer('sa5')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('sa5')">Hint</button>
           </div>
           <div class="hint" id="hint-sa5">
@@ -873,9 +867,9 @@
           </div>
           <textarea id="la1-input" placeholder="Define logistics, define supply chain, then explain that logistics is part of SCM and how they interact ..."></textarea>
           <div class="btn-row">
-            <button class="btn primary" onclick="showModelAnswer('la1')">Show model answer</button>
+            <button class="btn primary" onclick="toggleModelAnswer('la1')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('la1')">Hint</button>
-            <span class="badge-mini">Tip: use short sub‑headings like Definition, Purpose, Relationship</span>
+            <span class="badge-mini">Tip: use short headings like Definition, Purpose, Relationship</span>
           </div>
           <div class="hint" id="hint-la1">
             Use definitions from Nature of Logistics, Nature of Supply Chain, and the Supply Chain vs Logistics slide [file:1][file:5][file:4].
@@ -893,7 +887,7 @@
           </div>
           <textarea id="la2-input" placeholder="Explain decision making, aim (cost vs service), trade‑offs, 4Ds and benefits like cost savings, efficiency, customer satisfaction ..."></textarea>
           <div class="btn-row">
-            <button class="btn primary" onclick="showModelAnswer('la2')">Show model answer</button>
+            <button class="btn primary" onclick="toggleModelAnswer('la2')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('la2')">Hint</button>
           </div>
           <div class="hint" id="hint-la2">
@@ -912,7 +906,7 @@
           </div>
           <textarea id="la3-input" placeholder="Explain each: when production starts, level of customization, cost and lead time; link them to push/pull ..."></textarea>
           <div class="btn-row">
-            <button class="btn primary" onclick="showModelAnswer('la3')">Show model answer</button>
+            <button class="btn primary" onclick="toggleModelAnswer('la3')">Model answer</button>
             <button class="btn secondary" onclick="toggleHint('la3')">Hint</button>
           </div>
           <div class="hint" id="hint-la3">
@@ -928,13 +922,14 @@
         <div id="scoreText" class="score-value">0 / 17</div>
         <button class="btn primary" style="margin-top:6px;" onclick="calculateScore()">Calculate score</button>
         <div class="footer-note">
-          Short Answer and Long Answer questions are meant for self‑reflection; they are not auto‑graded. Focus on understanding the idea, not copying the model answer word‑for‑word.
+          Short and Long Answer questions are not auto‑graded. Use the model answers as a guide to check whether your understanding is correct.
         </div>
       </div>
     </main>
   </div>
 
   <script>
+    // Tabs
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -945,6 +940,7 @@
       });
     });
 
+    // Model answers
     const modelAnswers = {
       sa1: "Three main types: raw materials, work‑in‑progress (WIP), and finished goods [file:7].",
       sa2: "Examples: higher customer satisfaction, reduced costs, stronger brand reputation, and improved sustainability. Any two clearly stated are fine [file:6].",
@@ -952,7 +948,7 @@
       sa4: "The three flows: material (product) flow, information flow, and financial flow [file:3].",
       sa5: "Push: production based on forecast, higher inventory, risk of overproduction. Pull: production based on actual demand, lower inventory, risk of stockouts but more responsive to the market [file:7].",
       la1: "Logistics is the science and art of designing, managing and optimising networks for the time‑related positioning of resources, aiming to achieve the 7 rights (right product, quantity, place, time, customer, condition, price) [file:1]. Supply Chain integrates, coordinates and controls the movement of goods, materials and information from suppliers through intermediaries to the final consumer [file:5]. Logistics is one part of Supply Chain Management; SCM is broader and includes sourcing, procurement, conversion and all logistics activities, plus coordination with partners [file:4].",
-      la2: "Decision making in LSC is selecting the best course of action that balances cost and service [file:9]. The aim is to reach logistics solutions that are efficient, effective and economical. It uses trade‑offs (e.g., cost vs speed) and considers the 4Ds: Demand, Duration, Distance and Destination. Benefits include cost savings, increased efficiency, higher customer satisfaction, competitive advantage, agility and better sustainability [file:9].",
+      la2: "Decision making in LSC is selecting the best course of action that balances cost and service [file:9]. The aim is to reach logistics solutions that are efficient, effective and economical. It uses trade‑offs (e.g. cost vs speed) and considers the 4Ds: Demand, Duration, Distance and Destination. Benefits include cost savings, increased efficiency, higher customer satisfaction, competitive advantage, agility and better sustainability [file:9].",
       la3: "MTS (Make to Stock): push strategy; products are mass‑produced based on forecasts and stored; standardized, lowest unit cost, shortest lead time but risk of overproduction and high inventory [file:7]. MTO (Make to Order): pull strategy; production starts after a confirmed order; some customization, lower inventory, medium lead time. ETO (Engineer to Order): pull with engineering; product is designed and produced after order; highly customized, highest cost and longest lead time [file:7]. In short: MTS = forecast & stock, MTO = make after order, ETO = design + make after order for unique specs."
     };
 
@@ -1004,16 +1000,20 @@
       }
     }
 
-    function showModelAnswer(id) {
+    function toggleModelAnswer(id) {
       const fb = document.getElementById('fb-' + id);
       if (!fb) return;
+      if (fb.style.display === 'block') {
+        fb.style.display = 'none';
+        return;
+      }
       const model = modelAnswers[id];
       fb.className = 'feedback correct';
       fb.style.display = 'block';
       if (model) {
         fb.innerHTML = '<strong>Model answer (short):</strong><br>' +
           model +
-          '<div class="feedback-expected">Your own wording does not need to match this 100%. Focus on the same core idea.</div>';
+          '<div class="feedback-expected">Your wording does not need to match this 100%. Focus on the same core idea.</div>';
       } else {
         fb.textContent = 'No model answer defined for this question.';
       }
