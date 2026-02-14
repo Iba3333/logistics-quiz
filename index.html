@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>اختبار مراجعة اللوجستيات وسلسلة الإمداد</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg-main: #020617;
+      --bg-card: #020617;
+      --bg-inner: #0b1220;
+      --accent: #22c55e;
+      --accent-soft: rgba(34,197,94,0.12);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --danger: #f97373;
+      --border-soft: #1f2937;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-soft: 0 18px 45px rgba(0,0,0,0.6);
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: radial-gradient(circle at top, #111827, var(--bg-main));
+      color: var(--text-main);
+      line-height: 1.7;
+      padding: 20px 10px 40px;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.9);
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(34,197,94,0.9);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 14px 18px;
+      margin-top: 18px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(31,41,55,0.8);
+      margin-bottom: 10px;
+    }
+
+    .tab {
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: 0.18s ease;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, #22c55e, #4ade80);
+      color: #022c22;
+      border-color: rgba(34,197,94,0.9);
+      box-shadow: 0 0 12px rgba(34,197,94,0.6);
+    }
+
+    .tab:hover:not(.active) {
+      border-color: rgba(75,85,99,0.8);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+    }
+
+    .section-caption {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .group {
+      display: none;
+    }
+    .group.active {
+      display: block;
+    }
+
+    .question-card {
+      background: radial-gradient(circle at top, rgba(34,197,94,0.12), var(--bg-inner));
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(31,41,55,0.9);
+      padding: 12px 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 4px;
+      align-items: baseline;
+    }
+
+    .q-label {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .q-points {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .q-text {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 10px;
+      padding: 4px 7px;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .options label:hover {
+      background: rgba(15,23,42,0.9);
+    }
+
+    .options input[type="radio"] {
+      accent-color: #22c55e;
+    }
+
+    .tf-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+      font-size: 14px;
+    }
+
+    .tf-row label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 7px;
+      border-radius: 10px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: rgba(15,23,42,0.95);
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .tf-row label:hover {
+      border-color: rgba(148,163,184,0.9);
+    }
+
+    .tf-row input[type="radio"] {
+      accent-color: #22c55e;
+    }
+
+    textarea {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: rgba(15,23,42,0.96);
+      color: var(--text-main);
+      padding: 7px 8px;
+      font-size: 14px;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      transition: 0.18s ease;
+      margin-top: 4px;
+    }
+
+    textarea:focus {
+      border-color: rgba(34,197,94,0.8);
+      box-shadow: 0 0 0 1px rgba(34,197,94,0.6);
+    }
+
+    .btn-row {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 13px;
+      align-items: center;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 5px 12px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: 0.18s ease;
+      background: rgba(15,23,42,0.96);
+      color: var(--text-main);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      border-color: rgba(34,197,94,0.9);
+      box-shadow: 0 0 10px rgba(34,197,94,0.55);
+    }
+
+    .btn.primary:hover {
+      filter: brightness(1.07);
+      transform: translateY(-1px);
+    }
+
+    .btn.secondary {
+      border-color: rgba(75,85,99,0.9);
+      color: var(--text-muted);
+    }
+
+    .btn.secondary:hover {
+      background: rgba(15,23,42,0.98);
+      color: #e5e7eb;
+    }
+
+    .hint, .feedback {
+      margin-top: 6px;
+      font-size: 12px;
+      border-radius: 10px;
+      padding: 6px 8px;
+      border: 1px solid transparent;
+      display: none;
+    }
+
+    .hint {
+      border-color: rgba(250,204,21,0.7);
+      background: rgba(250,204,21,0.06);
+      color: #facc15;
+    }
+
+    .feedback.correct {
+      border-color: rgba(34,197,94,0.7);
+      background: var(--accent-soft);
+      color: #bbf7d0;
+      display: block;
+    }
+
+    .feedback.incorrect {
+      border-color: rgba(248,113,113,0.7);
+      background: rgba(248,113,113,0.13);
+      color: #fecaca;
+      display: block;
+    }
+
+    .feedback-expected {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .badge-mini {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      padding: 2px 7px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .score-box {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px dashed rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.96);
+      font-size: 13px;
+    }
+
+    .score-value {
+      color: #bbf7d0;
+      font-weight: 600;
+    }
+
+    .footer-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 21px;
+      }
+      .card {
+        padding: 12px 10px 14px;
+      }
+      .question-card {
+        padding: 10px 8px 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        الأكاديمية السعودية اللوجستية – اختبار مراجعة منتصف الترم
+      </div>
+      <h1>اختبار تفاعلي لمراجعة اللوجستيات وسلسلة الإمداد</h1>
+      <div class="subtitle">
+        MCQ – صح/خطأ – أسئلة قصيرة – أسئلة مقالية مع هنت، تصحيح فوري، ودرجة للأسئلة الموضوعية.
+      </div>
+    </header>
+
+    <main class="card">
+      <div class="tabs">
+        <button class="tab active" data-target="g-mcq">اختياري (MCQ)</button>
+        <button class="tab" data-target="g-tf">صح أو خطأ</button>
+        <button class="tab" data-target="g-sa">إجابة قصيرة</button>
+        <button class="tab" data-target="g-la">إجابة طويلة</button>
+      </div>
+
+      <div class="section-caption">
+        اختر التبويب، جاوب على السؤال، ثم اضغط "تحقق". استخدم "هنت" إذا احتجت تلميح من السلايدات.
+      </div>
+
+      <!-- MCQ GROUP -->
+      <section id="g-mcq" class="group active">
+        <!-- MCQ 1 -->
+        <div class="question-card" data-qid="mc1">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 1</div>
+              <div class="q-text">ما هي الوظائف الفرعية (Subfunctions) للوجستيات؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc1" value="a"> التخطيط، الشراء، الإنتاج، الإرجاع</label>
+            <label><input type="radio" name="mc1" value="b"> التخزين/المستودعات، التغليف، المخزون، النقل/التسليم، المعلومات والتحكم</label>
+            <label><input type="radio" name="mc1" value="c"> التسويق، المبيعات، المالية، الموارد البشرية</label>
+            <label><input type="radio" name="mc1" value="d"> الشراء، التصنيع، المحاسبة</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc1','b','الوظائف الفرعية الخمس: التخزين، التغليف، المخزون، النقل/التسليم، والمعلومات والتحكم [file:1].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc1')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc1">
+            ابحث في سلايد Nature of Logistics عن “Logistics five sub-functions” [file:1].
+          </div>
+          <div class="feedback" id="fb-mc1"></div>
+        </div>
+
+        <!-- MCQ 2 -->
+        <div class="question-card" data-qid="mc2">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 2</div>
+              <div class="q-text">ما هي أنواع التدفقات (Flows) الرئيسية في سلسلة الإمداد؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc2" value="a"> المنتج، التسويق، المالي</label>
+            <label><input type="radio" name="mc2" value="b"> تدفق المواد (Material)، تدفق المعلومات، التدفق المالي</label>
+            <label><input type="radio" name="mc2" value="c"> صاعد، نازل، عكسي</label>
+            <label><input type="radio" name="mc2" value="d"> داخلي، خارجي، ممتد</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc2','b','التدفقات الثلاثة: المواد، المعلومات، والمال [file:3].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc2')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc2">
+            راجع سلايد “Supply Chain Network and Flows” في Chapter 1 [file:3].
+          </div>
+          <div class="feedback" id="fb-mc2"></div>
+        </div>
+
+        <!-- MCQ 3 -->
+        <div class="question-card" data-qid="mc3">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 3</div>
+              <div class="q-text">ما هو الفرق الرئيسي بين Mission و Vision؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc3" value="a"> الـ Mission عن أهداف المستقبل، والـ Vision عن العمليات اليومية.</label>
+            <label><input type="radio" name="mc3" value="b"> الـ Mission ما تفعله الشركة الآن، والـ Vision ما تريد تحقيقه في المستقبل.</label>
+            <label><input type="radio" name="mc3" value="c"> الـ Mission موجهة للعملاء فقط، والـ Vision للموظفين فقط.</label>
+            <label><input type="radio" name="mc3" value="d"> لا يوجد فرق فعلي بينهما.</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc3','b','الـ Mission تشرح ماذا تفعل الشركة الآن ولمن وكيف، بينما الـ Vision تركز على الأهداف المستقبلية [file:8].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc3')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc3">
+            شوف مثال المراعي في سلايد Mission & Vision [file:8].
+          </div>
+          <div class="feedback" id="fb-mc3"></div>
+        </div>
+
+        <!-- MCQ 4 -->
+        <div class="question-card" data-qid="mc4">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 4</div>
+              <div class="q-text">ما الفرق الأساسي بين 3PL و 4PL؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc4" value="a"> 3PL يدير سلسلة الإمداد كاملة، و 4PL ينقل البضائع فقط.</label>
+            <label><input type="radio" name="mc4" value="b"> 3PL ينفذ العمليات الفعلية (نقل/تخزين)، 4PL يصمم ويدير سلسلة الإمداد بالكامل بدون تنفيذ فعلي.</label>
+            <label><input type="radio" name="mc4" value="c"> لا يوجد فرق جوهري.</label>
+            <label><input type="radio" name="mc4" value="d"> 3PL يشتغل محلي، 4PL دولي فقط.</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc4','b','3PL يوفر النقل والتخزين والتوزيع، بينما 4PL يدير سلسلة الإمداد بالكامل ويستعين بـ 3PL في التنفيذ [file:2].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc4')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc4">
+            راجع سلايد المقارنة بين 3PL و 4PL [file:2].
+          </div>
+          <div class="feedback" id="fb-mc4"></div>
+        </div>
+
+        <!-- MCQ 5 -->
+        <div class="question-card" data-qid="mc5">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 5</div>
+              <div class="q-text">ما المقصود بـ Reverse Logistics؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc5" value="a"> نقل البضائع من المورد إلى العميل فقط.</label>
+            <label><input type="radio" name="mc5" value="b"> حركة البضائع من العميل عودة إلى البائع أو المصنع (استرجاع، إصلاح، إعادة تدوير، إلخ).</label>
+            <label><input type="radio" name="mc5" value="c"> شحن سريع جوي.</label>
+            <label><input type="radio" name="mc5" value="d"> التخطيط للطلب المستقبلي فقط.</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc5','b','Reverse Logistics تعني إدارة تدفق البضائع من العميل رجوعًا للبائع/المصنع لغرض الاسترجاع أو الإصلاح أو إعادة التدوير أو التخلص [file:6].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc5')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc5">
+            ركّز على السهم العكسي في سلايد Reverse Logistics [file:6].
+          </div>
+          <div class="feedback" id="fb-mc5"></div>
+        </div>
+
+        <!-- MCQ 6 -->
+        <div class="question-card" data-qid="mc6">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 6</div>
+              <div class="q-text">ما الفرق بين FIFO و FEFO و LIFO؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc6" value="a"> الثلاثة تعني نفس الشيء.</label>
+            <label><input type="radio" name="mc6" value="b"> FIFO: أول ما دخل أول ما يخرج، LIFO: آخر ما دخل أول ما يخرج، FEFO: أول تاريخ انتهاء أول ما يخرج.</label>
+            <label><input type="radio" name="mc6" value="c"> FIFO للوقود فقط، LIFO للأكل، FEFO للسيارات.</label>
+            <label><input type="radio" name="mc6" value="d"> مصطلحات محاسبية فقط وليست لوجستية.</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc6','b','FIFO للأغذية والدواء غالباً، LIFO مفيد للمنتجات التي يزيد سعرها مثل البترول، FEFO يستخدم للمنتجات ذات الصلاحية مثل الأدوية [file:7].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc6')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc6">
+            شوف سلايد Inventory Strategies: FIFO / LIFO / FEFO [file:7].
+          </div>
+          <div class="feedback" id="fb-mc6"></div>
+        </div>
+
+        <!-- MCQ 7 -->
+        <div class="question-card" data-qid="mc7">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 7</div>
+              <div class="q-text">ما هي الـ 4Ds في اتخاذ القرار اللوجستي؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc7" value="a"> الطلب، المسافة، التوزيع، الوجهة</label>
+            <label><input type="radio" name="mc7" value="b"> الطلب، التطوير، التصميم، التوزيع</label>
+            <label><input type="radio" name="mc7" value="c"> الطلب، المدة، المسافة، الوجهة</label>
+            <label><input type="radio" name="mc7" value="d"> الطلب، المدة، التوزيع، السائقون</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc7','c','العوامل الأربعة: Demand, Duration, Distance, Destination [file:9].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc7')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc7">
+            سلايد Introduction to decision making – 4Ds [file:9].
+          </div>
+          <div class="feedback" id="fb-mc7"></div>
+        </div>
+
+        <!-- MCQ 8 -->
+        <div class="question-card" data-qid="mc8">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 8</div>
+              <div class="q-text">ما المقصود بإستراتيجية Just-In-Time (JIT)؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc8" value="a"> شراء مواد خام بكميات ضخمة وتخزينها لسنوات.</label>
+            <label><input type="radio" name="mc8" value="b"> شراء أو تصنيع ما نحتاجه فقط، في الوقت الذي نحتاجه، وبالكمية المطلوبة.</label>
+            <label><input type="radio" name="mc8" value="c"> شحن المنتجات مرة واحدة في السنة.</label>
+            <label><input type="radio" name="mc8" value="d"> تفويض كل اللوجستيات إلى شركة 3PL.</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc8','b','JIT يعني Buy/Make فقط ما هو مطلوب، عندما يكون مطلوبًا، وبالكمية المطلوبة، وارتبط بتويوتا [file:4][file:7].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc8')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc8">
+            سلايد JIT في Supply Chain activities + مثال Toyota [file:4][file:7].
+          </div>
+          <div class="feedback" id="fb-mc8"></div>
+        </div>
+
+        <!-- MCQ 9 -->
+        <div class="question-card" data-qid="mc9">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 9</div>
+              <div class="q-text">ما معنى SMART عند وضع الأهداف؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc9" value="a"> Simple, Measured, Active, Real, Timed</label>
+            <label><input type="radio" name="mc9" value="b"> Specific, Measurable, Achievable, Relevant, Time-based</label>
+            <label><input type="radio" name="mc9" value="c"> Strategic, Market-based, Accurate, Realistic, Tested</label>
+            <label><input type="radio" name="mc9" value="d"> Short, Medium, Annual, Regular, Tactical</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc9','b','SMART = Specific, Measurable, Achievable, Relevant, Time-based [file:8].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc9')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc9">
+            شوف جدول SMART goal في سلايد الإستراتيجية [file:8].
+          </div>
+          <div class="feedback" id="fb-mc9"></div>
+        </div>
+
+        <!-- MCQ 10 -->
+        <div class="question-card" data-qid="mc10">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 10</div>
+              <div class="q-text">أي عبارة تصف بشكل صحيح MTO و MTS و ETO؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc10" value="a"> MTS بعد الطلب، MTO قبل الطلب، ETO دائماً في المخزون.</label>
+            <label><input type="radio" name="mc10" value="b"> MTS: إنتاج للمخزون بناءً على التنبؤ؛ MTO: إنتاج بعد الطلب؛ ETO: تصميم وإنتاج بعد الطلب بمواصفات خاصة.</label>
+            <label><input type="radio" name="mc10" value="c"> الثلاثة تبدأ بعد الطلب فقط.</label>
+            <label><input type="radio" name="mc10" value="d"> فقط ETO يعتمد على التنبؤ.</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc10','b','MTS = Push & forecast، MTO و ETO = Pull تبدأ بعد الطلب، مع كون ETO يتضمن تصميم هندسي مخصص [file:7].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc10')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc10">
+            سلايد Production Approaches + الأمثلة (الزبادي، الطائرات، الآيفون) [file:7].
+          </div>
+          <div class="feedback" id="fb-mc10"></div>
+        </div>
+
+        <!-- MCQ 11 -->
+        <div class="question-card" data-qid="mc11">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 11</div>
+              <div class="q-text">ما هي التدفقات الثلاثة داخل سلسلة الإمداد الداخلية (Internal SC)؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc11" value="a"> تدفق مالي، تدفق البضائع، تدفق المعلومات</label>
+            <label><input type="radio" name="mc11" value="b"> صاعد، نازل، عكسي</label>
+            <label><input type="radio" name="mc11" value="c"> الإنتاج، التسويق، الموارد البشرية</label>
+            <label><input type="radio" name="mc11" value="d"> المشتريات، العمليات، التوزيع</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc11','a','الداخلية: Finance flow (Upstream)، Goods flow (Downstream)، Information flow (Both directions) [file:5].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc11')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc11">
+            سلايد Internal Supply Chain Flows – Finance / Goods / Information [file:5].
+          </div>
+          <div class="feedback" id="fb-mc11"></div>
+        </div>
+
+        <!-- MCQ 12 -->
+        <div class="question-card" data-qid="mc12">
+          <div class="q-header">
+            <div>
+              <div class="q-label">MCQ 12</div>
+              <div class="q-text">في لوجستيات المستودعات، ماذا نعني بـ Picking و Packaging؟</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="options">
+            <label><input type="radio" name="mc12" value="a"> اختيار الموردين وتصميم الكراتين.</label>
+            <label><input type="radio" name="mc12" value="b"> اختيار المنتجات من المخزون لتجهيز الطلب، ثم تغليفها استعدادًا للشحن.</label>
+            <label><input type="radio" name="mc12" value="c"> التخطيط لحملات التسويق.</label>
+            <label><input type="radio" name="mc12" value="d"> عدّ الشاحنات عند البوابة.</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkMC('mc12','b','Picking = اختيار الأصناف من المخزون حسب الطلب، Packaging = تغليفها وتجهيزها للشحن ضمن عملية Order fulfilment [file:2].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('mc12')">هنت</button>
+          </div>
+          <div class="hint" id="hint-mc12">
+            راجع سلايد 3PL Activities – Warehousing, Picking & Packing [file:2].
+          </div>
+          <div class="feedback" id="fb-mc12"></div>
+        </div>
+      </section>
+
+      <!-- TRUE/FALSE GROUP -->
+      <section id="g-tf" class="group">
+        <!-- TF 1 -->
+        <div class="question-card" data-qid="tf1">
+          <div class="q-header">
+            <div>
+              <div class="q-label">T/F 1</div>
+              <div class="q-text">الـ Mission Statement يشرح ماذا تفعل الشركة الآن، ولمن، وكيف.</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="tf-row">
+            <label><input type="radio" name="tf1" value="T"> صح</label>
+            <label><input type="radio" name="tf1" value="F"> خطأ</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkTF('tf1','T','الـ Mission تركز على الحاضر: ماذا تفعل الشركة، من هم عملاؤها، وكيف تخدمهم [file:8].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('tf1')">هنت</button>
+          </div>
+          <div class="hint" id="hint-tf1">
+            قارن تعريف Mission و Vision في سلايد الإستراتيجية [file:8].
+          </div>
+          <div class="feedback" id="fb-tf1"></div>
+        </div>
+
+        <!-- TF 2 -->
+        <div class="question-card" data-qid="tf2">
+          <div class="q-header">
+            <div>
+              <div class="q-label">T/F 2</div>
+              <div class="q-text">كلما زاد الرقم في 3PL و 4PL و 5PL، زاد مستوى الاستعانة بمصادر خارجية (Outsourcing).</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="tf-row">
+            <label><input type="radio" name="tf2" value="T"> صح</label>
+            <label><input type="radio" name="tf2" value="F"> خطأ</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkTF('tf2','T','PL = Party Logistics، والرقم يعكس مستوى أعلى من الـ Outsourcing من 1PL إلى 5PL [file:2].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('tf2')">هنت</button>
+          </div>
+          <div class="hint" id="hint-tf2">
+            راجع سلايد PL Levels من 1PL إلى 5PL [file:2].
+          </div>
+          <div class="feedback" id="fb-tf2"></div>
+        </div>
+
+        <!-- TF 3 -->
+        <div class="question-card" data-qid="tf3">
+          <div class="q-header">
+            <div>
+              <div class="q-label">T/F 3</div>
+              <div class="q-text">من الخدمات ذات القيمة المضافة (Value Added) عند 3PL: Picking & Packing و Custom Labelling و Order Fulfilment.</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="tf-row">
+            <label><input type="radio" name="tf3" value="T"> صح</label>
+            <label><input type="radio" name="tf3" value="F"> خطأ</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkTF('tf3','T','3PL يقدم خدمات توزيع وجملة تشمل Picking & Packing و Custom Labelling و Outbound Order Fulfilment [file:2].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('tf3')">هنت</button>
+          </div>
+          <div class="hint" id="hint-tf3">
+            سلايد Activities of 3PL – Distribution & wholesale services [file:2].
+          </div>
+          <div class="feedback" id="fb-tf3"></div>
+        </div>
+
+        <!-- TF 4 -->
+        <div class="question-card" data-qid="tf4">
+          <div class="q-header">
+            <div>
+              <div class="q-label">T/F 4</div>
+              <div class="q-text">شحن FTL غالباً أسرع وأقل في عدد مرات المناولة من LTL.</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="tf-row">
+            <label><input type="radio" name="tf4" value="T"> صح</label>
+            <label><input type="radio" name="tf4" value="F"> خطأ</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkTF('tf4','T','FTL غالباً يذهب مباشرة من المصدر إلى الوجهة، بمناولة أقل من LTL، لذلك أسرع وأقل تلفًا [file:10].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('tf4')">هنت</button>
+          </div>
+          <div class="hint" id="hint-tf4">
+            راجع مزايا FTL و LTL في Transportation Planning [file:10].
+          </div>
+          <div class="feedback" id="fb-tf4"></div>
+        </div>
+
+        <!-- TF 5 -->
+        <div class="question-card" data-qid="tf5">
+          <div class="q-header">
+            <div>
+              <div class="q-label">T/F 5</div>
+              <div class="q-text">Reverse Logistics ممكن يرفع رضا العملاء ويساعد في الاستدامة.</div>
+            </div>
+            <div class="q-points">درجة واحدة</div>
+          </div>
+          <div class="tf-row">
+            <label><input type="radio" name="tf5" value="T"> صح</label>
+            <label><input type="radio" name="tf5" value="F"> خطأ</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn primary" onclick="checkTF('tf5','T','من مزايا Reverse Logistics: higher customer satisfaction و improved sustainability وغيرها [file:6].')">تحقق</button>
+            <button class="btn secondary" onclick="toggleHint('tf5')">هنت</button>
+          </div>
+          <div class="hint" id="hint-tf5">
+            سلايد Advantages of Reverse Logistics (4 نقاط) [file:6].
+          </div>
+          <div class="feedback" id="fb-tf5"></div>
+        </div>
+      </section>
+
+      <!-- SHORT ANSWER GROUP -->
+      <section id="g-sa" class="group">
+        <!-- SA 1 -->
+        <div class="question-card" data-qid="sa1">
+          <div class="q-header">
+            <div>
+              <div class="q-label">SA 1</div>
+              <div class="q-text">اذكر ثلاثة أنواع من المخزون (Inventory).</div>
+            </div>
+            <div class="q-points">إجابة مفتوحة</div>
+          </div>
+          <textarea id="sa1-input" placeholder="مثال: Raw Materials, Work-in-Progress, Finished Goods ..."></textarea>
+          <div class="btn-row">
+            <button class="btn primary" onclick="showModelAnswer('sa1')">إظهار إجابة نموذجية</button>
+            <button class="btn secondary" onclick="toggleHint('sa1')">هنت</button>
+            <span class="badge-mini">التقييم يدوي – الأهم فهم الفكرة</span>
+          </div>
+          <div class="hint" id="hint-sa1">
+            سلايد Inventory & Warehousing يذكر 3 أنواع رئيسية للمخزون [file:7].
+          </div>
+          <div class="feedback" id="fb-sa1"></div>
+        </div>
+
+        <!-- SA 2 -->
+        <div class="question-card" data-qid="sa2">
+          <div class="q-header">
+            <div>
+              <div class="q-label">SA 2</div>
+              <div class="q-text">اذكر ميزتين على الأقل من مزايا Reverse Logistics.</div>
+            </div>
+            <div class="q-points">إجابة مفتوحة</div>
+          </div>
+          <textarea id="sa2-input" placeholder="مثال: higher customer satisfaction, reduced costs, stronger brand, improved sustainability ..."></textarea>
+          <div class="btn-row">
+            <button class="btn primary" onclick="showModelAnswer('sa2')">إظهار إجابة نموذجية</button>
+            <button class="btn secondary" onclick="toggleHint('sa2')">هنت</button>
+          </div>
+          <div class="hint" id="hint-sa2">
+            راجع سلايد Advantages of Reverse Logistics [file:6].
+          </div>
+          <div class="feedback" id="fb-sa2"></div>
+        </div>
+
+        <!-- SA 3 -->
+        <div class="question-card" data-qid="sa3">
+          <div class="q-header">
+            <div>
+              <div class="q-label">SA 3</div>
+              <div class="q-text">ما المقصود بـ "Right Condition" في اللوجستيات؟</div>
+            </div>
+            <div class="q-points">إجابة مفتوحة</div>
+          </div>
+          <textarea id="sa3-input" placeholder="اشرح بإيجاز: جودة، اكتمال، مظهر عام سليم ..."></textarea>
+          <div class="btn-row">
+            <button class="btn primary" onclick="showModelAnswer('sa3')">إظهار إجابة نموذجية</button>
+            <button class="btn secondary" onclick="toggleHint('sa3')">هنت</button>
+          </div>
+          <div class="hint" id="hint-sa3">
+            شوف Group activity عن IN THE RIGHT CONDITION في Nature of logistics [file:1].
+          </div>
+          <div class="feedback" id="fb-sa3"></div>
+        </div>
+
+        <!-- SA 4 -->
+        <div class="question-card" data-qid="sa4">
+          <div class="q-header">
+            <div>
+              <div class="q-label">SA 4</div>
+              <div class="q-text">اذكر أنواع التدفقات الثلاثة في سلسلة الإمداد.</div>
+            </div>
+            <div class="q-points">إجابة مفتوحة</div>
+          </div>
+          <textarea id="sa4-input" placeholder="اكتب مثل: Material Flow, Information Flow, Financial Flow ..."></textarea>
+          <div class="btn-row">
+            <button class="btn primary" onclick="showModelAnswer('sa4')">إظهار إجابة نموذجية</button>
+            <button class="btn secondary" onclick="toggleHint('sa4')">هنت</button>
+          </div>
+          <div class="hint" id="hint-sa4">
+            نفس سؤال MCQ 2 – نفس الثلاثة Flows في سلايد Supply Chain Network [file:3].
+          </div>
+          <div class="feedback" id="fb-sa4"></div>
+        </div>
+
+        <!-- SA 5 -->
+        <div class="question-card" data-qid="sa5">
+          <div class="q-header">
+            <div>
+              <div class="q-label">SA 5</div>
+              <div class="q-text">اشرح باختصار الفرق بين Push و Pull Strategy.</div>
+            </div>
+            <div class="q-points">إجابة مفتوحة</div>
+          </div>
+          <textarea id="sa5-input" placeholder="اشرح: Push = على التنبؤ و مخزون أعلى، Pull = على الطلب الفعلي و مخزون أقل ..."></textarea>
+          <div class="btn-row">
+            <button class="btn primary" onclick="showModelAnswer('sa5')">إظهار إجابة نموذجية</button>
+            <button class="btn secondary" onclick="toggleHint('sa5')">هنت</button>
+          </div>
+          <div class="hint" id="hint-sa5">
+            راجع سلايدات Push vs Pull Strategy + أمثلة الزبادي والطائرات والآيفون [file:7].
+          </div>
+          <div class="feedback" id="fb-sa5"></div>
+        </div>
+      </section>
+
+      <!-- LONG ANSWER GROUP -->
+      <section id="g-la" class="group">
+        <!-- LA 1 -->
+        <div class="question-card" data-qid="la1">
+          <div class="q-header">
+            <div>
+              <div class="q-label">LA 1</div>
+              <div class="q-text">اشرح ماذا نعني باللوجستيات وسلسلة الإمداد، ووضح العلاقة بينهما.</div>
+            </div>
+            <div class="q-points">إجابة مقالية</div>
+          </div>
+          <textarea id="la1-input" placeholder="رتّب إجابتك: تعريف اللوجستيات + تعريف سلسلة الإمداد + كيف أن اللوجستيات جزء من SCM ..."></textarea>
+          <div class="btn-row">
+            <button class="btn primary" onclick="showModelAnswer('la1')">إظهار إجابة نموذجية</button>
+            <button class="btn secondary" onclick="toggleHint('la1')">هنت</button>
+            <span class="badge-mini">نصيحة: استخدم عناوين صغيرة داخل إجابتك</span>
+          </div>
+          <div class="hint" id="hint-la1">
+            التعاريف في Nature of logistics + Nature of supply chain + سلايد Supply Chain vs Logistics [file:1][file:5][file:4].
+          </div>
+          <div class="feedback" id="fb-la1"></div>
+        </div>
+
+        <!-- LA 2 -->
+        <div class="question-card" data-qid="la2">
+          <div class="q-header">
+            <div>
+              <div class="q-label">LA 2</div>
+              <div class="q-text">اشرح عملية اتخاذ القرار (Decision Making) في اللوجستيات وسلسلة الإمداد، واذكر الفوائد.</div>
+            </div>
+            <div class="q-points">إجابة مقالية</div>
+          </div>
+          <textarea id="la2-input" placeholder="عرّف Decision making + Aim + Trade-offs + 4Ds + Benefits (تكلفة، كفاءة، رضا عميل، ميزة تنافسية ...)"></textarea>
+          <div class="btn-row">
+            <button class="btn primary" onclick="showModelAnswer('la2')">إظهار إجابة نموذجية</button>
+            <button class="btn secondary" onclick="toggleHint('la2')">هنت</button>
+          </div>
+          <div class="hint" id="hint-la2">
+            استخدم سلايد Introduction to Decision Making: aim, trade-offs, 4Ds, benefits [file:9].
+          </div>
+          <div class="feedback" id="fb-la2"></div>
+        </div>
+
+        <!-- LA 3 -->
+        <div class="question-card" data-qid="la3">
+          <div class="q-header">
+            <div>
+              <div class="q-label">LA 3</div>
+              <div class="q-text">وصف طرق الإنتاج الثلاث (MTO, MTS, ETO) وقارن بينها.</div>
+            </div>
+            <div class="q-points">إجابة مقالية</div>
+          </div>
+          <textarea id="la3-input" placeholder="اشرح كل واحد: متى يبدأ الإنتاج؟ مستوى التخصيص؟ التكلفة والمدة؟ واربطهم بـ Push/Pull ..."></textarea>
+          <div class="btn-row">
+            <button class="btn primary" onclick="showModelAnswer('la3')">إظهار إجابة نموذجية</button>
+            <button class="btn secondary" onclick="toggleHint('la3')">هنت</button>
+          </div>
+          <div class="hint" id="hint-la3">
+            راجع سلايد Production Approaches + الأمثلة والتقسيم في Hands-on [file:7].
+          </div>
+          <div class="feedback" id="fb-la3"></div>
+        </div>
+      </section>
+
+      <!-- SCORE -->
+      <div class="score-box">
+        <div><strong>النتيجة (MCQ + صح/خطأ فقط):</strong></div>
+        <div id="scoreText" class="score-value">0 / 17</div>
+        <button class="btn primary" style="margin-top:6px;" onclick="calculateScore()">احسب الدرجة</button>
+        <div class="footer-note">
+          أسئلة الـ Short Answer و Long Answer يتم تقييمها يدويًا (المهم فهم الفكرة، مو التطابق الحرفي).
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // تفعيل التبويبات
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const target = tab.dataset.target;
+        document.querySelectorAll('.group').forEach(g => g.classList.remove('active'));
+        document.getElementById(target).classList.add('active');
+      });
+    });
+
+    // بيانات الإجابات النموذجية لأسئلة SA/LA
+    const modelAnswers = {
+      sa1: "ثلاثة أنواع رئيسية: Raw Materials (مواد خام)، Work-in-Progress (تحت التشغيل)، Finished Goods (منتج تام) [file:7].",
+      sa2: "من المزايا: Higher customer satisfaction، Reduced costs، Stronger brand reputation، Improved sustainability. اذكر أي ميزتين على الأقل [file:6].",
+      sa3: "Right Condition تعني أن المنتج: (1) Quality: يقوم بالوظيفة المطلوبة وبأمان، (2) Completeness: كل الملحقات والتعليمات موجودة، (3) General appearance: نظيف وسليم بدون تلف أو ضرر [file:1].",
+      sa4: "أنواع التدفقات الثلاثة: Material (Product) Flow، Information Flow، Financial Flow [file:3].",
+      sa5: "Push: إنتاج اعتمادًا على التنبؤ، مستويات مخزون أعلى، خطر overproduction. Pull: إنتاج بناءً على الطلب الفعلي، مخزون أقل، خطر stockouts لكن استجابة أعلى للسوق [file:7].",
+      la1: "اللوجستيات: علم وفن تصميم وإدارة وتحسين الشبكات لوضع الموارد في المكان والزمان الصحيحين لتحقيق 7 Rights (المنتج المناسب، الكمية، المكان، الوقت، العميل، الحالة، السعر) [file:1]. سلسلة الإمداد: عملية تنسّق وتدمج حركة السلع والمواد والمعلومات من المورد حتى المستهلك النهائي عبر سلسلة من الوسطاء [file:5]. العلاقة: اللوجستيات جزء من Supply Chain Management؛ SCM أوسع وتشمل التخطيط، التوريد، التحويل، وكل الأنشطة اللوجستية مع التنسيق بين الشركاء [file:4].",
+      la2: "Decision making في اللوجستيات وسلسلة الإمداد هو اختيار أفضل بديل يوازن بين التكلفة ومستوى الخدمة [file:9]. الهدف: الوصول لحلول لوجستية efficient, effective, economical. يتم عبر فهم 4Ds (Demand, Duration, Distance, Destination) وعمل Trade-offs بين السرعة والتكلفة والمخزون. الفوائد: خفض التكاليف، رفع الكفاءة، تحسين رضا العملاء، تحقيق ميزة تنافسية، زيادة المرونة (Agility)، ودعم الاستدامة [file:9].",
+      la3: "MTS (Make to Stock): إنتاج للمخزون بناءً على Forecast (Push)، منتج قياسي، تكلفة أقل، Lead time قصير لكن خطر مخزون زائد [file:7]. MTO (Make to Order): إنتاج بعد الطلب (Pull)، يسمح ببعض التخصيص، مخزون أقل، Lead time متوسط. ETO (Engineer to Order): تصميم + إنتاج بعد الطلب (Pull)، تخصيص عالي، تكلفة أعلى، Lead time أطول [file:7]. الخلاصة: MTS = forecast & stock، MTO = إنتاج بعد الطلب، ETO = تصميم + إنتاج بعد الطلب لمواصفات خاصة."
+    };
+
+    function toggleHint(id) {
+      const el = document.getElementById('hint-' + id);
+      if (!el) return;
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function checkMC(id, correct, explanation) {
+      const selected = document.querySelector('input[name="' + id + '"]:checked');
+      const fb = document.getElementById('fb-' + id);
+      if (!fb) return;
+      if (!selected) {
+        fb.className = 'feedback incorrect';
+        fb.textContent = 'اختر إجابة أولاً.';
+        fb.dataset.correct = '0';
+        return;
+      }
+      if (selected.value === correct) {
+        fb.className = 'feedback correct';
+        fb.textContent = 'إجابة صحيحة ✔ – ' + explanation;
+        fb.dataset.correct = '1';
+      } else {
+        fb.className = 'feedback incorrect';
+        fb.textContent = 'إجابة غير صحيحة ✖ – ' + explanation;
+        fb.dataset.correct = '0';
+      }
+    }
+
+    function checkTF(id, correct, explanation) {
+      const selected = document.querySelector('input[name="' + id + '"]:checked');
+      const fb = document.getElementById('fb-' + id);
+      if (!fb) return;
+      if (!selected) {
+        fb.className = 'feedback incorrect';
+        fb.textContent = 'اختر (صح) أو (خطأ) أولاً.';
+        fb.dataset.correct = '0';
+        return;
+      }
+      if (selected.value === correct) {
+        fb.className = 'feedback correct';
+        fb.textContent = 'إجابة صحيحة ✔ – ' + explanation;
+        fb.dataset.correct = '1';
+      } else {
+        fb.className = 'feedback incorrect';
+        fb.textContent = 'إجابة غير صحيحة ✖ – ' + explanation;
+        fb.dataset.correct = '0';
+      }
+    }
+
+    function showModelAnswer(id) {
+      const fb = document.getElementById('fb-' + id);
+      if (!fb) return;
+      const model = modelAnswers[id];
+      fb.className = 'feedback correct';
+      fb.style.display = 'block';
+      if (model) {
+        fb.innerHTML = '<strong>إجابة نموذجية مختصرة:</strong><br>' +
+          model +
+          '<div class="feedback-expected">لا يلزم أن تطابق إجابتك هذه الصياغة 100٪، المهم أن تحتوي نفس الفكرة الأساسية.</div>';
+      } else {
+        fb.textContent = 'لا يوجد نموذج محدد لهذا السؤال.';
+      }
+    }
+
+    function calculateScore() {
+      const mcIds = ['mc1','mc2','mc3','mc4','mc5','mc6','mc7','mc8','mc9','mc10','mc11','mc12'];
+      const tfIds = ['tf1','tf2','tf3','tf4','tf5'];
+      const total = mcIds.length + tfIds.length;
+      let correct = 0;
+
+      mcIds.forEach(id => {
+        const fb = document.getElementById('fb-' + id);
+        if (fb && fb.dataset.correct === '1') correct++;
+      });
+      tfIds.forEach(id => {
+        const fb = document.getElementById('fb-' + id);
+        if (fb && fb.dataset.correct === '1') correct++;
+      });
+
+      const scoreText = document.getElementById('scoreText');
+      scoreText.textContent = correct + ' / ' + total;
+
+      if (correct === total) {
+        scoreText.textContent += ' – ممتاز 🔥 جاهز للاختبار.';
+      } else if (correct / total >= 0.7) {
+        scoreText.textContent += ' – شغلك ممتاز، راجع الأسئلة اللي طلعت خطأ فقط.';
+      } else {
+        scoreText.textContent += ' – محتاج تعيد المراجعة بهدوء، وبعدها جرّب الاختبار مرة ثانية.';
+      }
+    }
+  </script>
+</body>
+</html>
